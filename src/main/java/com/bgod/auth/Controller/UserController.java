@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/User")
@@ -30,8 +29,8 @@ public class UserController {
     return userService.deleteUser(id);
     }
     @PutMapping("/changePassword")
-    public ResponseEntity changePassword(@RequestBody String id,@RequestBody PasswordDTO passwordDTO){
-        return userService.changePassword(id,passwordDTO);
+    public ResponseEntity changePassword(@RequestBody PasswordDTO passwordDTO){
+        return userService.changePassword(passwordDTO);
     }
     @GetMapping("/userProfile")
     public ResponseEntity userProfile(@NonNull HttpServletRequest request){

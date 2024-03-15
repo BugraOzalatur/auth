@@ -2,7 +2,6 @@ package com.bgod.auth.Config;
 
 import com.bgod.auth.Security.JwtService;
 import com.bgod.auth.Service.UserDetailService;
-import com.bgod.auth.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +27,7 @@ public class SecurityConfig {
     private JwtService jwtService;
 
     @Autowired
-    private UserDetailService userService;
+    private UserDetailService  userService;
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix

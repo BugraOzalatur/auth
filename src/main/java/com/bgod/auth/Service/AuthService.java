@@ -2,6 +2,7 @@ package com.bgod.auth.Service;
 
 import com.bgod.auth.Entity.DTO.AuthDTO;
 import com.bgod.auth.Entity.DTO.LoginDTO;
+import com.bgod.auth.Entity.DTO.UserDTO;
 import com.bgod.auth.Entity.Role;
 import com.bgod.auth.Entity.User;
 import com.bgod.auth.Repository.UserRepository;
@@ -37,6 +38,8 @@ public class AuthService {
                     newUser.getPassword(),
                     newUser.getAuthorities()
             );
+
+
             String token=jwtToken.generateJwtToken(userDetails);
             return ResponseEntity.ok(token);
         }
@@ -54,8 +57,9 @@ public class AuthService {
                         user.getPassword(),
                         user.getAuthorities()
                 );
+
                 String token=jwtToken.generateJwtToken(userDetails);
-                return ResponseEntity.ok(token);
+                return ResponseEntity.ok(  token);
             }
             return ResponseEntity.badRequest().body("email veya şifre yanlış tekrar deneyi");
         }

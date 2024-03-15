@@ -3,6 +3,7 @@ package com.bgod.auth.Service;
 import com.bgod.auth.Entity.DTO.DeleteUserDTO;
 import com.bgod.auth.Entity.DTO.PasswordDTO;
 import com.bgod.auth.Entity.DTO.UpdateDTO;
+import com.bgod.auth.Entity.DTO.UserDTO;
 import com.bgod.auth.Entity.User;
 import com.bgod.auth.Repository.UserRepository;
 import com.bgod.auth.Security.JwtToken;
@@ -14,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService   {
@@ -27,7 +30,7 @@ private UserRepository userRepository;
     private BCryptPasswordEncoder passwordEncoder;
 
 public ResponseEntity updateUser(UpdateDTO updateDTO){
-UUID id=UUID.fromString(updateDTO.getId());
+UUID id=updateDTO.getId();
     User user=userRepository.getUserById(id);
 if(user == null){
     return ResponseEntity.badRequest().body("böyle bir kullanıcı yok");
@@ -36,11 +39,13 @@ user.setUserName(updateDTO.getUserName());
 if(userRepository.getUserByEmail(updateDTO.getEmail())== null){
     user.setEmail(updateDTO.getEmail());
 }
-return ResponseEntity.ok(userRepository.save(user));
+    userRepository.save(user);
+UserDTO updatedUserDTO=this.convertToDTO(user);
+return ResponseEntity.ok(updatedUserDTO);
 }
 
 public ResponseEntity deleteUser(DeleteUserDTO deleteUserDTO){
-    UUID userId=UUID.fromString(deleteUserDTO.getId());
+    UUID userId=deleteUserDTO.getId();
     User user=userRepository.getUserById(userId);
     if(user != null){
         userRepository.delete(user);
@@ -48,12 +53,12 @@ public ResponseEntity deleteUser(DeleteUserDTO deleteUserDTO){
     }
 return ResponseEntity.badRequest().body("böyle bir kullanıcı yok");
 }
-public ResponseEntity changePassword(String id, PasswordDTO passwordDTO){
+public ResponseEntity changePassword( PasswordDTO passwordDTO){
    String changedPassword= passwordDTO.getChangedPassword();
    String inDTOPasword=passwordDTO.getFirstPassword();
 
-   UUID userId=UUID.fromString(id);
-    User user=userRepository.getUserById(userId);
+   //UUID userId=UUID.fromString(id);
+    User user=userRepository.getUserById(passwordDTO.getId());
     if(user != null){
 String currentPassword=user.getPassword();
 if(passwordEncoder.matches(inDTOPasword,currentPassword)){
@@ -75,11 +80,26 @@ String hashedPassword=passwordEncoder.encode(changedPassword);
             return ResponseEntity.badRequest().body("böyle bir kullanıcı yok");
 
         }
-        return ResponseEntity.ok(userRepository.getUserById(id));
+        User user =userRepository.getUserById(id);
+        UserDTO signedUser=this.convertToDTO(user);
+        return ResponseEntity.ok(signedUser);
 
     }
     public ResponseEntity getAllUser() {
-    return ResponseEntity.ok(userRepository.findAll());
+    List<UserDTO> users= userRepository.findAll().stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(users);
 
     }
+    private UserDTO convertToDTO(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setUserName(user.getUserName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setRole(user.getRole());
+        return userDTO;
+    }
+
 }

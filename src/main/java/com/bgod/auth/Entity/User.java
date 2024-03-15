@@ -34,6 +34,9 @@ private String password;
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Set.of(new SimpleGrantedAuthority(role.toString()));
     }
+    public String getUserName(){
+        return userName;
+    }
 
     @Override
     public String getUsername() {

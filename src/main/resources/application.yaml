@@ -18,7 +18,7 @@ spring:
 value:
   jwt:
     secretKey: "2b9e0a5a1e9875f4d9c6e1a8f3b2d5c8a7f9e8d2c5b8a5d1e2f3b2d5c8e9875a"
-    expiration: 36000
+    expiration: 360000000
 server:
   port: 8000
 springdoc:

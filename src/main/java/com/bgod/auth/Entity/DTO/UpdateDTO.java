@@ -8,5 +8,5 @@ import java.util.UUID;
 public class UpdateDTO {
     private String email;
     private String userName;
-    private String id;
+    private UUID id;
 }
