@@ -1,0 +1,27 @@
+
+spring:
+
+  application:
+    name: auth
+  datasource:
+    url: jdbc:mysql://localhost:3306/authExample
+
+    username: root
+    password: password
+  jpa:
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+value:
+  jwt:
+    secretKey: "2b9e0a5a1e9875f4d9c6e1a8f3b2d5c8a7f9e8d2c5b8a5d1e2f3b2d5c8e9875a"
+    expiration: 36000
+server:
+  port: 8000
+springdoc:
+    api-docs:
+      enabled: true
+      path: /api-docs
